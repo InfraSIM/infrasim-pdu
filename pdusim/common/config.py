@@ -5,9 +5,17 @@ Copyright @ 2015 EMC Corporation All Rights Reserved
 '''
 import os
 import ConfigParser
+from texttable import Texttable
 import pdusim.common.logger as logger
 
 _conf_instance = None
+
+
+logging_dir = "/var/log/pdusim"
+server_pid_file = "/var/run/pdusim/infrasim-pduserv.pid"
+snmpsim_pid_file = "/var/run/snmpsim/snmpsimd.pid"
+
+pdusim_default_log = os.path.join(logging_dir, "pdusim.log")
 
 
 class Config(object):
@@ -150,6 +158,15 @@ class Config(object):
             self.__config_parser.write(open(self.host_conf, "w"))
         except Exception as ex:
             logger.error("Exception: {0}".format(ex))
+
+    def list(self):
+        table = Texttable()
+        table.add_row(['pdutype', self.pdu_name])
+        table.add_row(['dbtype', self.db_type])
+        table.add_row(['database', self.db_file])
+        table.add_row(['snmpdata', self.snmp_data_dir])
+        table.add_row(['simfile', self.sim_file])
+        return table.draw()
 
 
 def set_conf_instance(instance):
