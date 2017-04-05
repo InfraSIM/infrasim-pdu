@@ -222,7 +222,6 @@ def command_handler():
         args = parser.parse_args(sys.argv[2:])
 
         if hasattr(args, "start"):
-            main.precheck()
             main.start(args.no_daemon)
 
         elif hasattr(args, "stop"):

@@ -3,7 +3,8 @@ vpduserv is a service that is trying to emulate the behaviors of physical PDU (P
 
 # Installation
 
-<pre><code># python setup.py install </code></pre>
+<pre><code>sudo pip install -r requirements.txt </code></pre>
+<pre><code>python setup.py install </code></pre>
 
 # How to run vpduserv
 

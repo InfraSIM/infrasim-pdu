@@ -22,18 +22,19 @@ for x in os.walk('conf'):
             glob.glob(os.path.join(x[0], '*')))
     )
 
-for x in os.walk('third-party'):
-    data_files.append(
-            (sys.prefix + '/pdusim/' + '/'.join(os.path.split(x[0])),
-            glob.glob(os.path.join(x[0], '*.py')) + \
-            glob.glob(os.path.join(x[0], 'LICENSE')) + \
-            glob.glob(os.path.join(x[0], 'Makefile')) + \
-            glob.glob(os.path.join(x[0], '*.cfg')) + \
-            glob.glob(os.path.join(x[0], '*.rst')) + \
-            glob.glob(os.path.join(x[0], '*.bat')) + \
-            glob.glob(os.path.join(x[0], 'README*'))
-            )
-    )
+# install third-party libraries with pip
+# for x in os.walk('third-party'):
+#     data_files.append(
+#             (sys.prefix + '/pdusim/' + '/'.join(os.path.split(x[0])),
+#             glob.glob(os.path.join(x[0], '*.py')) + \
+#             glob.glob(os.path.join(x[0], 'LICENSE')) + \
+#             glob.glob(os.path.join(x[0], 'Makefile')) + \
+#             glob.glob(os.path.join(x[0], '*.cfg')) + \
+#             glob.glob(os.path.join(x[0], '*.rst')) + \
+#             glob.glob(os.path.join(x[0], '*.bat')) + \
+#             glob.glob(os.path.join(x[0], 'README*'))
+#             )
+#     )
 
 setup(
         name = "vpduserv",

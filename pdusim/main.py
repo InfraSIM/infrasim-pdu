@@ -1,4 +1,5 @@
 import os
+import sys
 import signal
 import sys
 import time
@@ -29,25 +30,27 @@ def signal_handler(signum, frame):
 
 def start(no_daemon=None):
     if status():
-        print "[ {:<6} ] is already running".format(
-            helper.get_pid_from_pid_file(config.server_pid_file))
-        return
+        raise Exception("[ {:<6} ] is already running".format(
+            helper.get_pid_from_pid_file(config.server_pid_file)))
+    precheck()
     global pdu_sim
     if no_daemon:
         logger.initialize("pdusim", "stdout")
     else:
-        daemonize(config.server_pid_file)
+        daemonize(config.server_pid_file, stdout="/dev/stdout")
 
     logger.info("vPDU started")
+    print "[ {:<6} ] starts to run".format(helper.get_pid_from_pid_file(config.server_pid_file))
+    if not no_daemon:
+        of = file("/dev/null", "a+")
+        os.dup2(of.fileno(), sys.stdout.fileno())
+
     init_signal()
     pdu_sim = pdusim.PDUSim()
     pdu_sim.set_daemon()
     pdu_sim.start()
 
     logger.info("PDU service PID: {}".format(pdu_sim.pid))
-    # FIXME: get parent pid!
-    print "[ {:<6} ] starts to run".format(pdu_sim.pid)
-
     logger.info("Server started")
     server = vPDUHandler(pdu_sim)
     server.serve_forever()
@@ -56,8 +59,7 @@ def start(no_daemon=None):
 def precheck():
     port_num = 20022
     if helper.check_if_port_in_use("127.0.0.1", port_num):
-        print "{} is already in use".format(port_num)
-        return
+        raise Exception("{} is already in use".format(port_num))
 
 
 def stop():
@@ -92,7 +94,6 @@ def status(stdout=False):
 
 def restart():
     stop()
-    precheck()
     start()
 
 
