@@ -36,11 +36,16 @@ def start(no_daemon=None):
     global pdu_sim
     if no_daemon:
         logger.initialize("pdusim", "stdout")
+        if not os.path.exists(os.path.dirname(config.server_pid_file)):
+            os.mkdir(os.path.dirname(config.server_pid_file))
+        with open(config.server_pid_file, "w+") as f:
+            f.write("{}\n".format(os.getpid()))
     else:
         daemonize(config.server_pid_file, stdout="/dev/stdout")
 
     logger.info("vPDU started")
     print "[ {:<6} ] starts to run".format(helper.get_pid_from_pid_file(config.server_pid_file))
+    # daemonized, redirect stdout to /dev/null
     if not no_daemon:
         of = file("/dev/null", "a+")
         os.dup2(of.fileno(), sys.stdout.fileno())
