@@ -3,10 +3,12 @@ import sys
 
 if __name__ == "__main__":
     try:
+        if len(sys.argv) < 2:
+            raise Exception("Too few arguments!")
         if sys.argv[1] == "pdu":
             from pdusim import cli
         else:
             from infrasim import cli
         cli.command_handler()
-    except ImportError as e:
+    except Exception as e:
         print e

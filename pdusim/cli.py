@@ -96,26 +96,6 @@ class MapCommands(object):
         pass
 
 
-class PassCommands(object):
-
-    @args("pdu", type=int, help="Specify the pdu index")
-    @args("port", type=int, help="Specify the pdu port index")
-    @args("passwd", help="Specify the password you want to set")
-    def set(self, pdu, port, passwd):
-        password.write_password(pdu, port, passwd)
-        print "Password of PDU {} PORT {} is set to {}".format(pdu, port, passwd)
-
-    @args("pdu", type=int, help="Specify the pdu index")
-    @args("port", type=int, help="Specify the pdu port index")
-    def get(self, pdu, port):
-        password_str = password.read_password(pdu, port)
-        print password_str or "Password for pdu {} port {} is not set.".format(pdu, port)
-
-    @args("pdu", type=int, help="Specify the pdu index")
-    def list(self, pdu):
-        print password.list_password(pdu)
-
-
 class IPCommands(object):
     @args("dev", help="Specify the network device you want to set")
     @args("ipaddr", help="Specify the ip address you want to set")
@@ -173,7 +153,6 @@ class IPCommands(object):
 CATEGORIES = {
     'config': ConfigCommands,
     'map': MapCommands,
-    'pass': PassCommands,
     'ip': IPCommands
 }
 
