@@ -6,6 +6,7 @@ Copyright @ 2015 EMC Corporation All Rights Reserved
 import time
 import os
 import re
+from texttable import Texttable
 import common.logger as logger
 import common.config as config
 
@@ -100,3 +101,16 @@ def write_password(pdu, port, password):
         fd.close()
     except IOError as e:
         logger.error("Error in open password file.exception: {}".format(e))
+
+
+def list_password(pdu):
+    table = Texttable()
+    table.header(["Port", "Password"])
+    table.set_cols_dtype(['d', 't'])
+    table.set_cols_align(['c', 'c'])
+    for port_index in range(24):
+        passwd = read_password(pdu, port_index + 1)
+        if passwd == "":
+            continue
+        table.add_row([port_index + 1, passwd])
+    return table.draw()
